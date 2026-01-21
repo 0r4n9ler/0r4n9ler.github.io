@@ -3,344 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>清濑的推理笔记 | 追风者的大事件</title>
-    <style>
-        :root {
-            --bg-color: #0f111a;
-            --card-bg: #1a1d29;
-            --accent-blue: #00d2ff; /* 柯南科技蓝 */
-            --accent-orange: #ff6b00; /* 强风活力橙 */
-            --text-main: #e0e0e0;
-            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: var(--font-main);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        /* === 柯南风格开场动画 === */
-        #loader {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #000;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1s ease;
-        }
-        .keyhole {
-            width: 100vw;
-            height: 100vh;
-            background: radial-gradient(circle at center, transparent 100px, #000 101px);
-            animation: keyholeOpen 2s forwards;
-        }
-        @keyframes keyholeOpen {
-            0% { transform: scale(1); }
-            100% { transform: scale(20); opacity: 0; }
-        }
-
-        /* === 背景风速特效 === */
-        .wind-lines {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            opacity: 0.1;
-            background: repeating-linear-gradient(
-                90deg,
-                transparent 0,
-                transparent 50px,
-                var(--accent-blue) 50px,
-                var(--accent-blue) 51px
-            );
-            transform: skewX(-20deg);
-            animation: windMove 2s linear infinite;
-        }
-        @keyframes windMove {
-            from { background-position: 0 0; }
-            to { background-position: 100px 0; }
-        }
-
-        /* === 导航栏 === */
-        nav {
-            padding: 20px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            position: fixed;
-            width: 100%;
-            z-index: 100;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .logo {
-            font-weight: 800;
-            font-size: 1.5rem;
-            color: var(--accent-orange);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .logo span { color: var(--accent-blue); }
-
-        /* === Hero Section === */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            position: relative;
-        }
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--accent-orange), var(--accent-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(0, 210, 255, 0.3);
-        }
-        .hero p {
-            font-size: 1.5rem;
-            max-width: 600px;
-            margin-bottom: 40px;
-            border-left: 4px solid var(--accent-orange);
-            padding-left: 20px;
-            text-align: left;
-        }
-        .btn-start {
-            padding: 15px 40px;
-            border: 2px solid var(--accent-blue);
-            color: var(--accent-blue);
-            background: transparent;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-start:hover {
-            background: var(--accent-blue);
-            color: #000;
-            box-shadow: 0 0 20px var(--accent-blue);
-        }
-
-        /* === 大事件时间轴 (结合箱根驿传的“路”与柯南的“线索”) === */
-        .timeline-section {
-            padding: 100px 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 80px;
-            position: relative;
-        }
-        .section-title::after {
-            content: "CASE FILE / HAKONE";
-            display: block;
-            font-size: 1rem;
-            letter-spacing: 5px;
-            color: var(--accent-orange);
-            margin-top: 10px;
-        }
-
-        .timeline {
-            position: relative;
-        }
-        /* 中间的接力带/警戒线 */
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(to bottom, var(--accent-blue), var(--accent-orange));
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
-        }
-
-        .event-card {
-            width: 45%;
-            margin-bottom: 60px;
-            position: relative;
-            background: var(--card-bg);
-            padding: 30px;
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 4px;
-            transition: transform 0.3s ease;
-        }
-        /* 红砖纹理装饰 - 柯南元素 */
-        .event-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 5px;
-            background: repeating-linear-gradient(45deg, #a52a2a, #a52a2a 10px, #8b0000 10px, #8b0000 20px);
-        }
-
-        .event-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border-color: var(--accent-blue);
-        }
-
-        .event-card:nth-child(odd) { left: 0; text-align: right; }
-        .event-card:nth-child(even) { left: 55%; text-align: left; }
-
-        /* 连接点 */
-        .event-card::after {
-            content: '⚽'; /* 柯南足球或跑鞋图标 */
-            position: absolute;
-            top: 20px;
-            font-size: 20px;
-            width: 40px; height: 40px;
-            background: #000;
-            border: 2px solid var(--accent-orange);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-        }
-        .event-card:nth-child(odd)::after { right: -13.5%; }
-        .event-card:nth-child(even)::after { left: -13.5%; }
-
-        .date {
-            color: var(--accent-orange);
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            font-family: 'Courier New', monospace;
-        }
-        .card-title {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #fff;
-        }
-        .card-desc {
-            color: #aaa;
-            font-size: 0.95rem;
-        }
-
-        /* === 页脚 === */
-        footer {
-            text-align: center;
-            padding: 50px;
-            background: #000;
-            color: #555;
-            font-size: 0.9rem;
-            border-top: 3px solid var(--accent-blue);
-        }
-        
-        /* 响应式调整 */
-        @media (max-width: 768px) {
-            .timeline::before { left: 20px; }
-            .event-card { width: 85%; left: 50px !important; text-align: left !important; }
-            .event-card::after { left: -43px !important; }
-        }
-    </style>
+    <meta name="description" content="oranger's blog：以《强风吹拂》的热血与《名侦探柯南》的推理为灵感，记录技术成长与人生跑道。">
+    
+    <title>oranger's blog | 追风者的大事件</title>
+    
+    <link rel="stylesheet" href="assets/style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script defer src="assets/main.js"></script>
 </head>
 <body>
-    <div id="loader">
+    <div id="loader" aria-hidden="true">
         <div class="keyhole"></div>
     </div>
 
-    <div class="wind-lines"></div>
+    <div class="wind-lines" aria-hidden="true"></div>
 
     <nav>
-        <div class="logo">AOTAKE<span>DETECTIVE</span></div>
-        <div style="font-size: 0.9rem; color: #888;">// CTFer_Admin_Online</div>
+        <div class="logo">oranger's <span>blog</span></div>
+        <div class="nav-actions">
+            <button class="nav-btn" onclick="document.getElementById('postModal').classList.add('open')">
+                + 文章
+            </button>
+            <button class="nav-btn" onclick="document.getElementById('timeline').scrollIntoView({behavior:'smooth'})">
+                + 大事件
+            </button>
+        </div>
     </nav>
 
-    <section class="hero">
-        <h1>The Truth is in the Wind</h1>
+    <header class="hero">
+        <h1 data-text="The Truth is in the Wind">The Truth is in the Wind</h1>
         <p>
             “明明这么痛苦，为什么还要跑？”<br>
             “因为真相，永远只有一个。”
         </p>
-        <button class="btn-start" onclick="document.querySelector('.timeline-section').scrollIntoView({behavior: 'smooth'})">
-            INITIATE_EVENT_LOG()
-        </button>
-    </section>
+    </header>
 
-    <section class="timeline-section">
+    <main class="timeline-section" id="timeline">
         <h2 class="section-title">大事件档案</h2>
-        
-        <div class="timeline">
-            <div class="event-card">
-                <div class="date">2023.04.01</div>
-                <h3 class="card-title">竹青庄集结 / 案件初现</h3>
-                <p class="card-desc">
-                    就像被命运选中的10个人。搭建博客的第一行代码，也是通往箱根（Root）的第一步。Docker环境部署完毕。
-                </p>
-            </div>
+        <div class="timeline-container" id="timelineContainer"></div>
+    </main>
 
-            <div class="event-card">
-                <div class="date">2023.12.25</div>
-                <h3 class="card-title">记录点：突破瓶颈</h3>
-                <p class="card-desc">
-                    攻克了困扰已久的AWD防御脚本。就像灰二哥说的，强风迎面吹拂，逆境才是觉醒的开始。
-                </p>
-            </div>
-
-            <div class="event-card">
-                <div class="date">2024.01.15</div>
-                <h3 class="card-title">Web渗透 / 寻找“犯人”</h3>
-                <p class="card-desc">
-                    在杂乱的日志中利用SQL注入寻找真相。身体变得轻盈，代码在指尖流淌，这不仅仅是技术，这是推理。
-                </p>
-            </div>
-
-            <div class="event-card">
-                <div class="date">FUTURE</div>
-                <h3 class="card-title">向着顶峰</h3>
-                <p class="card-desc">
-                    箱根山的顶点，或者系统最高权限（Root）。只要跑下去，只要思考下去，就一定能看到那道光。
-                </p>
-            </div>
-        </div>
+    <section class="posts-section" id="posts">
+        <h2 class="section-title">文章档案</h2>
+        <div id="postList" class="post-list"></div>
     </section>
+
+    <div id="postModal" class="post-modal" aria-hidden="true">
+        <div class="post-modal__backdrop" data-close="1"></div>
+        <div class="post-modal__panel" role="dialog" aria-modal="true">
+            <button class="post-modal__close" id="postCloseBtn" aria-label="关闭">✕</button>
+            <div class="post-modal__meta">
+                <h3 id="postTitle"></h3>
+                <div id="postInfo" class="post-info"></div>
+            </div>
+            <article id="postContent" class="md-body"></article>
+        </div>
+    </div>
 
     <footer>
-        <p>© 2026 Powered by RunWithTheWind & DetectiveConan | </p>
+        <p>
+            © 2026 Powered by RunWithTheWind & DetectiveConan | 
+            <a href="https://github.com/0r4n9ler" target="_blank" rel="noopener">GitHub</a>
+        </p>
     </footer>
-
-    <script>
-        // 页面加载完成后移除遮罩
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loader').style.display = 'none';
-                }, 1000);
-            }, 1500);
-        });
-
-        // 简单的滚动触发动画
-        const cards = document.querySelectorAll('.event-card');
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.style.opacity = 1;
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, { threshold: 0.1 });
-
-        cards.forEach(card => {
-            card.style.opacity = 0;
-            card.style.transform = 'translateY(50px)';
-            card.style.transition = 'all 0.6s ease-out';
-            observer.observe(card);
-        });
-    </script>
 </body>
 </html>
