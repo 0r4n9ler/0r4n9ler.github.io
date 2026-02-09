@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="oranger's blog：以《强风吹拂》的热血与《名侦探柯南》的推理为灵感，记录技术成长与人生跑道。">
+    
+    <title>oranger's blog | 追风者的大事件</title>
+    
+    <link rel="stylesheet" href="assets/style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script defer src="assets/main.js"></script>
+</head>
+<body>
+    <div id="loader" aria-hidden="true">
+        <div class="keyhole"></div>
+    </div>
+
+    <div class="wind-lines" aria-hidden="true"></div>
+
+    <nav>
+        <div class="logo">oranger's <span>blog</span></div>
+        <div class="nav-actions">
+            <button class="nav-btn" onclick="openPostManager()">
+                + 文章
+            </button>
+            <button class="nav-btn" onclick="openEventManager()">
+                + 大事件
+            </button>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1 data-text="The Truth is in the Wind">The Truth is in the Wind</h1>
+        <p>
+            “明明这么痛苦，为什么还要跑？”<br>
+            “因为真相，永远只有一个。”
+        </p>
+    </header>
+
+    <main class="timeline-section" id="timeline">
+        <h2 class="section-title">大事件档案</h2>
+        <div class="timeline-container" id="timelineContainer"></div>
+    </main>
+
+    <section class="posts-section" id="posts">
+        <h2 class="section-title">文章档案</h2>
+        <div id="postList" class="post-list"></div>
+    </section>
+
+    <div id="eventModal" class="post-modal" aria-hidden="true">
+        <div class="post-modal__backdrop" onclick="closeEventManager()"></div>
+        <div class="post-modal__panel" role="dialog" aria-modal="true">
+            <button class="post-modal__close" onclick="closeEventManager()" aria-label="关闭">✕</button>
+            <div class="post-modal__meta">
+                <h3>大事件管理 (Event Manager)</h3>
+                <div class="post-info">在此添加、删除或导出你的时间线节点</div>
+            </div>
+            <div class="md-body" id="eventManagerContent" style="padding: 20px;">
+                <!-- Manager Interface Injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <div id="articleManagerModal" class="post-modal" aria-hidden="true">
+        <div class="post-modal__backdrop" onclick="closePostManager()"></div>
+        <div class="post-modal__panel" role="dialog" aria-modal="true" style="max-width: 900px; width: 95%;">
+            <button class="post-modal__close" onclick="closePostManager()" aria-label="关闭">✕</button>
+            <div class="post-modal__meta">
+                <h3>文章管理 (Article Manager)</h3>
+                <div class="post-info">在此撰写、编辑或管理你的博客文章</div>
+            </div>
+            <div class="md-body" id="articleManagerContent" style="padding: 20px;">
+                <!-- Manager Interface Injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <div id="postModal" class="post-modal" aria-hidden="true">
+        <div class="post-modal__backdrop" data-close="1"></div>
+        <div class="post-modal__panel" role="dialog" aria-modal="true">
+            <button class="post-modal__close" id="postCloseBtn" aria-label="关闭">✕</button>
+            <div class="post-modal__meta">
+                <h3 id="postTitle"></h3>
+                <div id="postInfo" class="post-info"></div>
+            </div>
+            <article id="postContent" class="md-body"></article>
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            © 2026 Powered by RunWithTheWind & DetectiveConan | 
+            <a href="https://github.com/0r4n9ler" target="_blank" rel="noopener">GitHub</a>
+        </p>
+    </footer>
+</body>
+</html>

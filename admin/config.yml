@@ -1,0 +1,47 @@
+backend:
+  name: github
+  repo: 0r4n9ler/0r4n9ler.github.io # 【修改】你的仓库 用户名/仓库名
+  branch: main
+  # 【重要】这是你的 Cloudflare Worker 地址，必须部署好 sterlingwes/decap-proxy 才能登录
+  base_url: https://oranger-decap-proxy.oranger-admin.workers.dev
+
+media_folder: "img"        # 图片上传位置
+public_folder: "../img"    # 文章中引用的相对路径
+
+# 界面语言（可选）
+locale: 'zh_Hans'
+
+# 预览样式（可选，让后台预览和前台一致）
+# styles:
+#   - "/assets/style.css"
+
+collections:
+  # === 1. 大事件 (修改 assets/events.json) ===
+  - name: "data"
+    label: "数据管理"
+    files:
+      - name: "events"
+        label: "大事件档案"
+        file: "assets/events.json"
+        fields:
+          - name: "events"
+            label: "事件列表"
+            widget: "list"
+            fields:
+              - {label: "日期", name: "date", widget: "string", hint: "格式：2023.12.25 或 FUTURE"}
+              - {label: "标题", name: "title", widget: "string"}
+              - {label: "内容", name: "content", widget: "text"}
+
+  # === 2. 文章 (新建 posts/*.md) ===
+  - name: "posts"
+    label: "文章档案"
+    folder: "posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - {label: "标题", name: "title", widget: "string"}
+      - {label: "发布时间", name: "date", widget: "datetime", format: "YYYY-MM-DD", dateFormat: "YYYY-MM-DD", timeFormat: false}
+      - {label: "标签", name: "tags", widget: "list", default: ["CTF"]}
+      - {label: "内容", name: "body", widget: "markdown"}
