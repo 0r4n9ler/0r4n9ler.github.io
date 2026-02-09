@@ -128,6 +128,8 @@ async function loadPosts() {
         modal.classList.remove('open');
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+        // Reset URL on close
+        history.pushState(null, null, window.location.pathname);
     };
 
     modal.addEventListener('click', (e) => { if (e.target.dataset.close === '1') closeModal(); });
@@ -186,9 +188,27 @@ async function loadPosts() {
         if (!p) return;
 
         titleEl.textContent = p.title || 'Untitled';
-        infoEl.textContent = `${p.date || ''} · ${p.tags ? p.tags.join(' / ') : ''}`;
+        // Add Busuanzi Counter Container
+        infoEl.innerHTML = `${p.date || ''} · ${p.tags ? p.tags.join(' / ') : ''} 
+            <span id="busuanzi_container_page_pv" style="margin-left:15px; display:none; color:var(--accent-orange); font-size:0.9em;">
+                🔥 阅读: <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+            </span>`;
+            
         contentEl.innerHTML = `<p style="text-align:center;padding:40px;">LOADING REVELATION...</p>`;
         openModal();
+
+        // Update URL and Reload Busuanzi to count this specific post
+        const newUrl = window.location.pathname + '#/post/' + (p.id || idx);
+        history.pushState(null, null, newUrl);
+        
+        // Reload Busuanzi script to trigger new page view
+        const oldScript = document.getElementById('bsz-script');
+        if (oldScript) oldScript.remove();
+        const script = document.createElement('script');
+        script.src = "//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js";
+        script.id = "bsz-script";
+        script.async = true;
+        document.body.appendChild(script);
 
         try {
             let mdText = '';
